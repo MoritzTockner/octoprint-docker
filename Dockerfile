@@ -88,4 +88,16 @@ EXPOSE 80
 
 VOLUME /octoprint
 
+# Automatically make nodes for printer and webcam
+RUN echo "#!/usr/bin/execlineb -P\nmknod /dev/ttyUSB0 c 188 0" >> /etc/cont-init.d/01-init-usb-device
+RUN echo "#!/usr/bin/execlineb -P\nmknod /dev/video0 c 81 0" >> /etc/cont-init.d/02-init-usb-device
+
+# Install octoprint plugins
+RUN /usr/local/bin/python -m pip install --upgrade pip
+RUN /usr/local/bin/python -m pip install "https://github.com/jneilliii/OctoPrint-BedLevelingWizard/archive/master.zip"
+RUN /usr/local/bin/python -m pip install "https://github.com/BillyBlaze/OctoPrint-FullScreen/archive/master.zip"
+RUN /usr/local/bin/python -m pip install "https://github.com/eyal0/OctoPrint-PrintTimeGenius/archive/master.zip"
+RUN /usr/local/bin/python -m pip install "https://github.com/Renaud11232/OctoPrint-Resource-Monitor/archive/master.zip"
+
+# Install 
 ENTRYPOINT ["/init"]
